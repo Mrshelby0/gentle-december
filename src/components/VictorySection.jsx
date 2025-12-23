@@ -186,7 +186,6 @@ export default function VictorySection() {
           }}
         >
           <p>Made with infinite love and devotion</p>
-          <p>December 22, 2025</p>
           <p style={{ marginTop: "1rem", fontSize: "2rem" }}>✨💕🌹</p>
         </motion.div>
       </motion.div>

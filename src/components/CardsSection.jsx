@@ -94,37 +94,37 @@ export default function CardsSection() {
       emoji: "🌟",
       title: "Your Light",
       content:
-        "You illuminate my world in ways words cannot describe. Every moment with you shines brighter than a thousand stars.",
+        "You have this quiet way of changing the atmosphere. When you're around, things feel calmer, warmer, lighter. You don't try to shine — you just do.",
     },
     {
       emoji: "💎",
       title: "Your Essence",
       content:
-        "Like a precious gem, you are rare, beautiful, and irreplaceable. Your presence makes everything precious.",
+        "There's something rare about you. Not loud, not forced, just real. Being around you makes ordinary moments feel meaningful.",
     },
     {
       emoji: "🌺",
       title: "Your Grace",
       content:
-        "Your elegance and grace flow through everything you do. You make the world more beautiful simply by being in it.",
+        "The way you move through the world — with kindness, patience, and dignity — it stays with people long after you've left the room.",
     },
     {
       emoji: "🔥",
       title: "Your Fire",
       content:
-        "Your passion, your strength, your spirit - they burn bright and ignite something magical within my soul.",
+        "Your strength doesn't scream. It shows up every day, even when things are heavy. That kind of fire inspires more than it impresses.",
     },
     {
       emoji: "🌊",
       title: "Your Depth",
       content:
-        "Like an ocean, you are deep, mysterious, and endlessly fascinating. I could spend eternity exploring your beauty.",
+        "There's so much beneath the surface. Thoughts, emotions, silence that speaks. You're not someone you understand in a moment — and that's beautiful.",
     },
     {
       emoji: "👑",
       title: "Your Royalty",
       content:
-        "You are royalty in every sense - not by birthright, but by the magnificence of your character and heart.",
+        "Not because of status, not because of perfection, but because of your values, your heart, and the way you hold yourself with quiet confidence.",
     },
   ];
 
@@ -155,7 +155,7 @@ export default function CardsSection() {
           WebkitTextFillColor: "transparent",
         }}
       >
-        Why You Are My Everything
+        Why I Respect You (And Also I Fall For You)
       </motion.h2>
 
       <div

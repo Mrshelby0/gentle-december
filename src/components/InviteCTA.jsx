@@ -44,7 +44,7 @@ export default function InviteCTA() {
             marginBottom: "0.8rem",
           }}
         >
-          Christmas plan?
+          So... What Now?
         </h3>
 
         <p
@@ -54,7 +54,9 @@ export default function InviteCTA() {
             lineHeight: "1.6",
           }}
         >
-          Maybe coffee, maybe a walk, maybe you pick. No pressure—just us hanging out. 😊
+          I made this because I genuinely want to do something for you, a gift that lasts long and want to do something different. Something that shows I care.
+          <br /><br />
+          Let's see where this goes. Together. 💕
         </p>
 
         <div style={{ display: "flex", justifyContent: "center", gap: "1rem", flexWrap: "wrap" }}>

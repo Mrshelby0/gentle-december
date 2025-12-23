@@ -128,7 +128,7 @@ export default function VictorySection() {
             lineHeight: "1.8",
           }}
         >
-          I made this because I genuinely like you and wanted to do something different. Something that shows I care.
+          I made this because I genuinely want to do something for you, a gift that lasts long and want to do something different. Something that shows I care.
         </motion.p>
 
         <motion.p

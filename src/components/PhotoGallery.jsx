@@ -1,32 +1,186 @@
-import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { motion, AnimatePresence, useMotionValue, useAnimationControls } from "framer-motion";
+import { useState, useRef, useEffect } from "react";
 
-export default function PhotoGallery() {
-  const [selectedIndex, setSelectedIndex] = useState(null);
+// Import images and videos from src/assets/deviji
+import photo1 from "../assets/deviji/1.jpeg";
+import video1 from "../assets/deviji/1.mp4";
+import photo2 from "../assets/deviji/2.jpeg";
+import video2 from "../assets/deviji/2.mp4";
+import photo3 from "../assets/deviji/3.jpeg";
+import video3 from "../assets/deviji/3.mp4";
+import photo4 from "../assets/deviji/4.jpeg";
+import video4 from "../assets/deviji/4.mp4";
+import photo5 from "../assets/deviji/5.jpeg";
+import video5 from "../assets/deviji/5.mp4";
+import photo6 from "../assets/deviji/6.jpeg";
+import video6 from "../assets/deviji/6.mp4";
+import photo7 from "../assets/deviji/7.jpeg";
+import photo8 from "../assets/deviji/8.jpeg";
+import photo9 from "../assets/deviji/9.jpeg";
+import photo10 from "../assets/deviji/10.jpeg";
 
-  // Placeholder images - user will replace with their photos
-  const photos = [
+export default function PhotoGallery({ audioRef }) {
+  const [selectedMedia, setSelectedMedia] = useState(null);
+  const [hoveredIndex, setHoveredIndex] = useState(null);
+  const videoRefs = useRef([]);
+  const x = useMotionValue(0);
+  const controls = useAnimationControls();
+  const [isDragging, setIsDragging] = useState(false);
+  const [scrollDirection, setScrollDirection] = useState(-1); // -1 for left, 1 for right
+
+  useEffect(() => {
+    if (!isDragging && hoveredIndex === null) {
+      // Continue scrolling in the current direction
+      const startX = x.get();
+      const targetX = scrollDirection === -1 ? startX - 1800 : startX + 1800;
+      
+      controls.start({
+        x: targetX,
+        transition: {
+          duration: 30,
+          ease: "linear",
+          repeat: Infinity,
+          repeatType: "loop",
+        }
+      });
+    } else {
+      controls.stop();
+    }
+  }, [isDragging, hoveredIndex, scrollDirection, controls, x]);
+
+  // Gallery with images and videos (alternating: video, photo, video, photo...)
+  const gallery = [
     {
       id: 1,
-      title: "Us Together",
-      img: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=500&h=500&fit=crop",
+      type: "video",
+      src: video1,
+      message: "Your Radiance",
+      quote: "You have this rare kind of beauty that makes the world pause."
     },
     {
       id: 2,
-      title: "Your Smile",
-      img: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=500&h=500&fit=crop",
+      type: "image",
+      src: photo1,
+      message: "Pure Elegance",
+      quote: "There's something about you that's effortlessly captivating."
     },
     {
       id: 3,
-      title: "Memories",
-      img: "https://images.unsplash.com/photo-1514888286974-6c03bf1a1dba?w=500&h=500&fit=crop",
+      type: "video",
+      src: video2,
+      message: "Your Grace",
+      quote: "The way you carry yourself speaks volumes without saying a word."
     },
     {
       id: 4,
-      title: "Forever",
-      img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=500&fit=crop",
+      type: "image",
+      src: photo2,
+      message: "Absolutely Stunning",
+      quote: "Your smile could light up the darkest corners of this world."
+    },
+    {
+      id: 5,
+      type: "video",
+      src: video3,
+      message: "Your Presence",
+      quote: "You walk into a room and everything just feels... better."
+    },
+    {
+      id: 6,
+      type: "image",
+      src: photo3,
+      message: "Breathtaking",
+      quote: "Some people are just naturally beautiful, and you're one of them."
+    },
+    {
+      id: 7,
+      type: "video",
+      src: video4,
+      message: "Your Spirit",
+      quote: "Your beauty isn't just what you see, it's who you are inside."
+    },
+    {
+      id: 8,
+      type: "image",
+      src: photo4,
+      message: "Mesmerizing",
+      quote: "You have this quiet confidence that's incredibly attractive."
+    },
+    {
+      id: 9,
+      type: "video",
+      src: video5,
+      message: "Simply Beautiful",
+      quote: "You don't even try, and that's what makes you extraordinary."
+    },
+    {
+      id: 10,
+      type: "image",
+      src: photo5,
+      message: "Your Aura",
+      quote: "There's a warmth about you that draws people in naturally."
+    },
+    {
+      id: 11,
+      type: "video",
+      src: video6,
+      message: "Remarkable",
+      quote: "You're the kind of person people remember long after they meet you."
+    },
+    {
+      id: 12,
+      type: "image",
+      src: photo6,
+      message: "Captivating Soul",
+      quote: "Your kindness and beauty create something truly rare."
+    },
+    {
+      id: 13,
+      type: "image",
+      src: photo7,
+      message: "Unforgettable",
+      quote: "Everything about you leaves a lasting impression."
+    },
+    {
+      id: 14,
+      type: "image",
+      src: photo8,
+      message: "Your Essence",
+      quote: "You're beautiful in ways that go beyond what eyes can see."
+    },
+    {
+      id: 15,
+      type: "image",
+      src: photo9,
+      message: "Absolutely Incredible",
+      quote: "You have a way of making ordinary moments feel special."
+    },
+    {
+      id: 16,
+      type: "image",
+      src: photo10,
+      message: "Pure Admiration",
+      quote: "I appreciate everything you are, inside and out."
     },
   ];
+
+  const handleMediaClick = (media) => {
+    setSelectedMedia(media);
+    // Pause background music when opening a video
+    if (audioRef && audioRef.current && media.type === "video") {
+      try {
+        audioRef.current.pause();
+      } catch {}
+    }
+  };
+
+  const closeSelected = () => {
+    // Resume background music from the same position if a video was open
+    if (audioRef && audioRef.current && selectedMedia && selectedMedia.type === "video") {
+      audioRef.current.play().catch(() => {});
+    }
+    setSelectedMedia(null);
+  };
 
   return (
     <section
@@ -41,117 +195,249 @@ export default function PhotoGallery() {
       }}
     >
       <motion.h2
-        initial={{ opacity: 0, y: -50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-        viewport={{ once: true }}
+        initial={{ opacity: 0, y: -30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
         style={{
-          fontSize: "3rem",
-          color: "white",
           fontFamily: "Playfair Display",
-          marginBottom: "4rem",
-          background: "linear-gradient(45deg, #ff6b9d, #ffa07a)",
+          fontSize: "3.5rem",
+          background: "linear-gradient(to right, #ff6b9d, #f07280)",
           WebkitBackgroundClip: "text",
           WebkitTextFillColor: "transparent",
+          marginBottom: "4rem",
+          textAlign: "center",
         }}
       >
-        Our Memories ✨
+        Our Beautiful Gallery
       </motion.h2>
 
       <div
         style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-          gap: "2rem",
-          maxWidth: "1000px",
           width: "100%",
+          overflow: "hidden",
+          position: "relative",
+          height: "500px",
+          display: "flex",
+          alignItems: "center",
         }}
       >
-        {photos.map((photo, i) => (
-          <motion.div
-            key={photo.id}
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ delay: i * 0.1, duration: 0.6 }}
-            viewport={{ once: true }}
-            onClick={() => setSelectedIndex(i)}
-            whileHover={{ scale: 1.05, rotate: 2 }}
-            style={{
-              cursor: "pointer",
-              borderRadius: "15px",
-              overflow: "hidden",
-              position: "relative",
-              aspectRatio: "1",
-            }}
-          >
-            <img
-              src={photo.img}
-              alt={photo.title}
+        <motion.div
+          drag="x"
+          dragConstraints={{ left: 0, right: 0 }}
+          dragElastic={0.2}
+          animate={controls}
+          onDragStart={() => {
+            setIsDragging(true);
+            controls.stop();
+          }}
+          onDrag={(e, info) => {
+            // Update scroll direction based on drag velocity
+            if (info.velocity.x > 100) {
+              setScrollDirection(1); // dragging right, scroll right
+            } else if (info.velocity.x < -100) {
+              setScrollDirection(-1); // dragging left, scroll left
+            }
+          }}
+          onDragEnd={(e, info) => {
+            setIsDragging(false);
+            // Set direction based on final drag direction
+            if (info.offset.x > 50) {
+              setScrollDirection(1); // scroll right
+            } else if (info.offset.x < -50) {
+              setScrollDirection(-1); // scroll left
+            }
+          }}
+          style={{
+            display: "flex",
+            gap: "2rem",
+            cursor: isDragging ? "grabbing" : "grab",
+            x,
+          }}
+        >
+          {/* Create multiple copies for seamless infinite loop */}
+          {[...Array(4)].map((_, setIndex) => (
+            <div
+              key={setIndex}
               style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-              }}
-            />
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileHover={{ opacity: 1 }}
-              style={{
-                position: "absolute",
-                inset: 0,
-                background: "rgba(0, 0, 0, 0.6)",
                 display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "white",
-                fontSize: "1.3rem",
+                gap: "2rem",
+                minWidth: "fit-content",
               }}
             >
-              {photo.title}
-            </motion.div>
-          </motion.div>
-        ))}
+              {gallery.map((media, index) => (
+                <motion.div
+                  key={`${setIndex}-${media.id}`}
+                  onMouseEnter={() => setHoveredIndex(index)}
+                  onMouseLeave={() => setHoveredIndex(null)}
+                  whileHover={{ scale: 1.1 }}
+                  onClick={() => handleMediaClick(media)}
+                  style={{
+                    minWidth: "280px",
+                    height: "400px",
+                    borderRadius: "20px",
+                    overflow: "hidden",
+                    cursor: "pointer",
+                    boxShadow: "0 20px 60px rgba(255, 107, 157, 0.3)",
+                    border: "3px solid rgba(255, 107, 157, 0.3)",
+                    position: "relative",
+                  }}
+                >
+                  {media.type === "image" ? (
+                    <img
+                      src={media.src}
+                      alt={media.message}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                      }}
+                    />
+                  ) : (
+                    <video
+                      ref={(el) => {
+                        if (el) videoRefs.current[index] = el;
+                      }}
+                      src={media.src}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                      }}
+                    />
+                  )}
+                  
+                  {/* Hover overlay */}
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    whileHover={{ opacity: 1 }}
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      background: "linear-gradient(to top, rgba(0,0,0,0.8), transparent)",
+                      display: "flex",
+                      alignItems: "flex-end",
+                      justifyContent: "center",
+                      padding: "1.5rem",
+                    }}
+                  >
+                    <p
+                      style={{
+                        color: "white",
+                        fontSize: "1.2rem",
+                        fontWeight: "600",
+                        textAlign: "center",
+                      }}
+                    >
+                      {media.message}
+                    </p>
+                  </motion.div>
+                </motion.div>
+              ))}
+            </div>
+          ))}
+        </motion.div>
       </div>
 
-      {/* Lightbox */}
+      {/* Popup Modal */}
       <AnimatePresence>
-        {selectedIndex !== null && (
+        {selectedMedia && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setSelectedIndex(null)}
+            onClick={closeSelected}
             style={{
               position: "fixed",
               inset: 0,
-              background: "rgba(0, 0, 0, 0.9)",
+              background: "rgba(0, 0, 0, 0.95)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               zIndex: 100,
               padding: "2rem",
+              flexDirection: "column",
             }}
           >
-            <motion.img
-              initial={{ scale: 0.8 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0.8 }}
-              src={photos[selectedIndex].img}
-              alt={photos[selectedIndex].title}
-              style={{
-                maxWidth: "90%",
-                maxHeight: "90vh",
-                borderRadius: "20px",
-              }}
+            <motion.div
+              initial={{ scale: 0.8, y: 50 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.8, y: 50 }}
               onClick={(e) => e.stopPropagation()}
-            />
+              style={{
+                maxWidth: "800px",
+                width: "100%",
+                background: "linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(240, 114, 128, 0.1))",
+                borderRadius: "30px",
+                padding: "2rem",
+                backdropFilter: "blur(20px)",
+                border: "2px solid rgba(255, 107, 157, 0.3)",
+              }}
+            >
+              {selectedMedia.type === "image" ? (
+                <img
+                  src={selectedMedia.src}
+                  alt={selectedMedia.message}
+                  style={{
+                    width: "100%",
+                    maxHeight: "60vh",
+                    objectFit: "contain",
+                    borderRadius: "20px",
+                    marginBottom: "2rem",
+                  }}
+                />
+              ) : (
+                <video
+                  src={selectedMedia.src}
+                  autoPlay
+                  loop
+                  controls
+                  playsInline
+                  style={{
+                    width: "100%",
+                    maxHeight: "60vh",
+                    objectFit: "contain",
+                    borderRadius: "20px",
+                    marginBottom: "2rem",
+                  }}
+                />
+              )}
+              
+              <h3
+                style={{
+                  color: "#ff6b9d",
+                  fontFamily: "Playfair Display",
+                  fontSize: "2rem",
+                  textAlign: "center",
+                  marginBottom: "1rem",
+                }}
+              >
+                {selectedMedia.message}
+              </h3>
+              
+              <p
+                style={{
+                  color: "white",
+                  fontSize: "1.2rem",
+                  textAlign: "center",
+                  fontStyle: "italic",
+                  opacity: 0.9,
+                }}
+              >
+                "{selectedMedia.quote}"
+              </p>
+            </motion.div>
+
             <motion.button
-              onClick={() => setSelectedIndex(null)}
-              whileHover={{ scale: 1.1 }}
+              onClick={closeSelected}
+              whileHover={{ scale: 1.1, rotate: 90 }}
               style={{
                 position: "absolute",
-                top: "20px",
-                right: "20px",
+                top: "30px",
+                right: "30px",
                 background: "rgba(255, 107, 157, 0.8)",
                 border: "none",
                 color: "white",
@@ -160,6 +446,9 @@ export default function PhotoGallery() {
                 height: "60px",
                 borderRadius: "50%",
                 cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
               ✕
@@ -170,9 +459,8 @@ export default function PhotoGallery() {
 
       <motion.p
         initial={{ opacity: 0 }}
-        whileInView={{ opacity: 0.7 }}
+        animate={{ opacity: 0.7 }}
         transition={{ delay: 1, duration: 2 }}
-        viewport={{ once: true }}
         style={{
           marginTop: "3rem",
           color: "white",
@@ -181,7 +469,7 @@ export default function PhotoGallery() {
           textAlign: "center",
         }}
       >
-        Click on any photo to see it in full screen
+        Hover to pause • Click on any photo or video to see the special message 💕
       </motion.p>
     </section>
   );
